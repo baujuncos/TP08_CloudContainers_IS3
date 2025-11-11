@@ -1,0 +1,50 @@
+services:
+  # QA Environment
+  - type: web
+    name: tiktask-qa
+    env: docker
+    region: oregon
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: qa
+      - key: PORT
+        value: 3000
+      - key: DATABASE_PATH
+        value: /app/data/database.sqlite
+      - key: JWT_SECRET
+        generateValue: true
+      - key: RENDER_ENV
+        value: qa
+    disk:
+      name: tiktask-qa-data
+      mountPath: /app/data
+      sizeGB: 1
+
+  # Production Environment
+  - type: web
+    name: tiktask-prod
+    env: docker
+    region: oregon
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: DATABASE_PATH
+        value: /app/data/database.sqlite
+      - key: JWT_SECRET
+        generateValue: true
+      - key: RENDER_ENV
+        value: production
+    disk:
+      name: tiktask-prod-data
+      mountPath: /app/data
+      sizeGB: 1
+    # Production specific configurations
+    healthCheckPath: /api/health
+    numInstances: 1
+    autoDeploy: false  # Require manual approval for production
