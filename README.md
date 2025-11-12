@@ -8,11 +8,23 @@ Aplicación web de gestión de tareas construida con Node.js, Express y SQLite, 
 
 ## 📚 Documentación del TP8
 
-### 🎯 Para completar el TP8, seguí esta guía paso a paso:
-➡️ **[GUIA_TP8.md](./GUIA_TP8.md)** - Guía completa con instrucciones detalladas
+### 🎯 Índice de toda la documentación:
+➡️ **[DOCUMENTACION_INDEX.md](./DOCUMENTACION_INDEX.md)** - Índice completo de guías
+
+### 🚀 Para configurar el pipeline CI/CD, seguí esta guía:
+➡️ **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Guía paso a paso de configuración de CI/CD
+
+### 📐 Para entender las decisiones técnicas:
+➡️ **[DECISIONES_ARQUITECTONICAS.md](./DECISIONES_ARQUITECTONICAS.md)** - Justificación detallada
+
+### 📸 Para ejemplos visuales:
+➡️ **[GUIA_VISUAL.md](./GUIA_VISUAL.md)** - Guía con capturas visuales
 
 ### 📋 Consignas originales del TP:
 ➡️ **[TP8_consignas.MD](./TP8_consignas.MD)** - Requisitos y consignas del trabajo práctico
+
+### 📖 Guía de referencia adicional:
+➡️ **[GUIA_TP8.md](./GUIA_TP8.md)** - Guía con información adicional del proyecto
 
 ---
 
@@ -31,14 +43,23 @@ Acceder a: **http://localhost**
 
 ```
 TP08_CloudContainers_IS3/
-├── backend/              # API Node.js + Express
-│   ├── Dockerfile       # Imagen Docker del backend
-│   └── ...
-├── frontend/            # Frontend HTML/CSS/JS + Nginx
-│   ├── Dockerfile       # Imagen Docker del frontend
-│   └── ...
-├── docker-compose.yml   # Orquestación de servicios
-└── .github/workflows/   # CI/CD con GitHub Actions
+├── backend/                    # API Node.js + Express
+│   ├── src/                   # Código fuente
+│   ├── tests/                 # Tests unitarios e integración
+│   ├── Dockerfile             # Imagen Docker del backend
+│   ├── server.js              # Servidor Express
+│   └── package.json           # Dependencias
+├── frontend/                   # Frontend HTML/CSS/JS + Nginx
+│   ├── Dockerfile             # Imagen Docker del frontend
+│   ├── nginx.conf             # Configuración Nginx
+│   ├── index.html             # Aplicación SPA
+│   └── app.js                 # Lógica del cliente
+├── docker-compose.yml          # Orquestación local
+├── render.yaml                 # Configuración de servicios en Render
+├── .github/workflows/          # CI/CD con GitHub Actions
+│   └── cicd-pipeline.yml      # Pipeline completo
+├── SETUP_GUIDE.md              # Guía de configuración paso a paso
+└── README.md                   # Este archivo
 ```
 
 ### Opciones de ejecución
@@ -67,31 +88,41 @@ docker run -p 80:80 tiktask-frontend
 
 ## 🏗️ Arquitectura TP8
 
-**Stack implementado (Ejemplo 1 de las consignas):**
+**Stack implementado (Opción 1 - GitHub Stack):**
 
 ```
 GitHub Repository
   ↓
 GitHub Actions (CI/CD)
-  ↓ Build + Test
-  ↓ Docker Build + Push
+  ↓ Build & Test Backend
+  ↓ Build Docker Images (Frontend + Backend)
+  ↓ Push to GitHub Container Registry (GHCR)
   ↓
-GitHub Container Registry (ghcr.io)
-  ↓
-Deploy automático → Render.com QA (Free)
-  ↓ Approval Gate
-Deploy manual → Render.com PROD (Starter $7/mo)
+Deploy automático → Render QA
+  ├─ Frontend QA (Free)
+  └─ Backend QA (Free)
+  ↓ Approval Gate (Manual)
+Deploy manual → Render PROD
+  ├─ Frontend PROD (Starter $7/mo)
+  └─ Backend PROD (Starter $7/mo)
 ```
 
-**Costo total: $7/mes**
+**Servicios totales:** 4 servicios (2 en QA, 2 en PROD)
+**Imágenes Docker:** 2 imágenes (reutilizadas en ambos ambientes)
+
+**Costo total: $14/mes** (o puedes usar Free tier en ambos ambientes = $0)
 
 ### Componentes
 
 - ✅ **Container Registry**: GitHub Container Registry (gratis)
 - ✅ **CI/CD**: GitHub Actions (gratis)
-- ✅ **QA Environment**: Render.com Free tier (gratis)
-- ✅ **PROD Environment**: Render.com Starter ($7/mes)
-- ✅ **Pipeline completo**: Build → Test → Deploy QA → Approval → Deploy PROD
+- ✅ **QA Environment**: Render.com
+  - Frontend QA (Free tier)
+  - Backend QA (Free tier)
+- ✅ **PROD Environment**: Render.com
+  - Frontend PROD (Starter $7/mes)
+  - Backend PROD (Starter $7/mes)
+- ✅ **Pipeline completo**: Build → Test → Push Images → Deploy QA → Approval → Deploy PROD
 
 ---
 
@@ -172,7 +203,8 @@ npm run test:coverage
 
 ## 📖 Más Información
 
-- **Guía completa del TP8**: [GUIA_TP8.md](./GUIA_TP8.md)
+- **Guía de configuración CI/CD**: [SETUP_GUIDE.md](./SETUP_GUIDE.md) - **¡EMPIEZA AQUÍ!**
+- **Guía de referencia del TP8**: [GUIA_TP8.md](./GUIA_TP8.md)
 - **Consignas originales**: [TP8_consignas.MD](./TP8_consignas.MD)
 - **Reportar issues**: [GitHub Issues](https://github.com/baujuncos/TP08_CloudContainers_IS3/issues)
 

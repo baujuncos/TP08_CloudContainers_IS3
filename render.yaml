@@ -1,11 +1,22 @@
+# Render Blueprint - TikTask Application
+# This file defines the infrastructure for deploying TikTask to Render
+# 4 services total: 2 for QA (frontend + backend), 2 for PROD (frontend + backend)
+
 services:
-  # QA Environment
+  # ============================================
+  # QA ENVIRONMENT - BACKEND
+  # ============================================
   - type: web
-    name: tiktask-qa
+    name: tiktask-backend-qa
     env: docker
     region: oregon
     plan: free
-    dockerfilePath: ./Dockerfile
+    # Pull image from GitHub Container Registry
+    # Image will be: ghcr.io/<your-username>/tiktask-backend:latest
+    image:
+      # Note: You'll need to replace <your-username> with your GitHub username
+      # or configure this through Render dashboard
+      url: ghcr.io/baujuncos/tiktask-backend:latest
     envVars:
       - key: NODE_ENV
         value: qa
@@ -18,17 +29,40 @@ services:
       - key: RENDER_ENV
         value: qa
     disk:
-      name: tiktask-qa-data
+      name: tiktask-backend-qa-data
       mountPath: /app/data
       sizeGB: 1
+    healthCheckPath: /api/health
 
-  # Production Environment
+  # ============================================
+  # QA ENVIRONMENT - FRONTEND
+  # ============================================
   - type: web
-    name: tiktask-prod
+    name: tiktask-frontend-qa
+    env: docker
+    region: oregon
+    plan: free
+    # Pull image from GitHub Container Registry
+    image:
+      url: ghcr.io/baujuncos/tiktask-frontend:latest
+    envVars:
+      - key: BACKEND_URL
+        # This should point to the backend service URL
+        # Format: https://tiktask-backend-qa.onrender.com
+        value: https://tiktask-backend-qa.onrender.com
+    healthCheckPath: /
+
+  # ============================================
+  # PRODUCTION ENVIRONMENT - BACKEND
+  # ============================================
+  - type: web
+    name: tiktask-backend-prod
     env: docker
     region: oregon
     plan: starter
-    dockerfilePath: ./Dockerfile
+    # Pull image from GitHub Container Registry
+    image:
+      url: ghcr.io/baujuncos/tiktask-backend:latest
     envVars:
       - key: NODE_ENV
         value: production
@@ -41,10 +75,29 @@ services:
       - key: RENDER_ENV
         value: production
     disk:
-      name: tiktask-prod-data
+      name: tiktask-backend-prod-data
       mountPath: /app/data
       sizeGB: 1
-    # Production specific configurations
     healthCheckPath: /api/health
+    numInstances: 1
+    autoDeploy: false  # Require manual approval for production
+
+  # ============================================
+  # PRODUCTION ENVIRONMENT - FRONTEND
+  # ============================================
+  - type: web
+    name: tiktask-frontend-prod
+    env: docker
+    region: oregon
+    plan: starter
+    # Pull image from GitHub Container Registry
+    image:
+      url: ghcr.io/baujuncos/tiktask-frontend:latest
+    envVars:
+      - key: BACKEND_URL
+        # This should point to the production backend service URL
+        # Format: https://tiktask-backend-prod.onrender.com
+        value: https://tiktask-backend-prod.onrender.com
+    healthCheckPath: /
     numInstances: 1
     autoDeploy: false  # Require manual approval for production
