@@ -189,6 +189,12 @@ jobs:
             echo "⚠️ QA_FRONTEND_URL not configured"
           fi
 
+      - name: Notify Success
+        run: |
+          echo "✅ Deployment to QA completed successfully!"
+          echo "🌐 QA Frontend: ${{ vars.QA_FRONTEND_URL }}"
+          echo "🔧 QA Backend: ${{ vars.QA_BACKEND_URL }}"
+
   # =======================================
   # 🚀 DEPLOY TO RENDER PROD
   # =======================================
@@ -258,7 +264,5 @@ jobs:
       - name: Notify Success
         run: |
           echo "✅ Deployment to Production completed successfully!"
-          echo "🌐 QA Frontend: ${{ vars.QA_FRONTEND_URL }}"
-          echo "🔧 QA Backend: ${{ vars.QA_BACKEND_URL }}"
           echo "🚀 PROD Frontend: ${{ vars.PROD_FRONTEND_URL }}"
           echo "🔧 PROD Backend: ${{ vars.PROD_BACKEND_URL }}"
