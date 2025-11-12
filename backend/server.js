@@ -16,7 +16,14 @@ const PORT = process.env.PORT || 3000;
 
 // Security middleware
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://tiktask-frontend-qa.onrender.com',
+    'https://tiktask-frontend-prod.onrender.com',
+    'http://localhost'
+  ],
+  credentials: true
+}));
 
 // Rate limiting
 const limiter = rateLimit({

@@ -1,18 +1,26 @@
-# Frontend Dockerfile - Serve static files with nginx
 FROM nginx:alpine
 
-# Copy static files to nginx html directory
-COPY . /usr/share/nginx/html
+# Instalar gettext para envsubst (sustitución de variables)
+RUN apk add --no-cache gettext
 
-# Copy custom nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copiar archivos del frontend
+COPY index.html /usr/share/nginx/html/
+COPY app.js /usr/share/nginx/html/
+COPY styles.css /usr/share/nginx/html/
 
-# Expose port 80
+# Copiar template de configuración de nginx
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
+
+# Copiar script de inicio
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Exponer puerto 80
 EXPOSE 80
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost/ || exit 1
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --quiet --tries=1 --spider http://localhost/health || exit 1
 
-# Start nginx
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]
