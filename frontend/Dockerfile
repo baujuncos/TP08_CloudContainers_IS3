@@ -7,8 +7,12 @@ RUN apk add --no-cache gettext
 # Copy static files to nginx html directory
 COPY index.html styles.css app.js /usr/share/nginx/html/
 
-# Copy nginx configuration template
-COPY nginx.conf /etc/nginx/templates/default.conf.template
+# Copy nginx config as template
+COPY nginx.conf /etc/nginx/conf.d/default.conf.template
+
+# Copy entrypoint script
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 
 # Set default backend URL (can be overridden with environment variable)
 ENV BACKEND_URL=http://backend:3000
@@ -22,4 +26,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # Use entrypoint script to substitute environment variables
 # nginx:alpine image includes docker-entrypoint.sh that processes templates
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
