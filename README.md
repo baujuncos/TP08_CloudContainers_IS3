@@ -8,8 +8,17 @@ Aplicación web de gestión de tareas construida con Node.js, Express y SQLite, 
 
 ## 📚 Documentación del TP8
 
+### 🎯 Índice de toda la documentación:
+➡️ **[DOCUMENTACION_INDEX.md](./DOCUMENTACION_INDEX.md)** - Índice completo de guías
+
 ### 🚀 Para configurar el pipeline CI/CD, seguí esta guía:
 ➡️ **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Guía paso a paso de configuración de CI/CD
+
+### 📐 Para entender las decisiones técnicas:
+➡️ **[DECISIONES_ARQUITECTONICAS.md](./DECISIONES_ARQUITECTONICAS.md)** - Justificación detallada
+
+### 📸 Para ejemplos visuales:
+➡️ **[GUIA_VISUAL.md](./GUIA_VISUAL.md)** - Guía con capturas visuales
 
 ### 📋 Consignas originales del TP:
 ➡️ **[TP8_consignas.MD](./TP8_consignas.MD)** - Requisitos y consignas del trabajo práctico
